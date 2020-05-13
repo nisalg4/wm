@@ -1,0 +1,230 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2512
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 Menlo-Regular;\f1\fnil\fcharset0 Menlo-Bold;}
+{\colortbl;\red255\green255\blue255;\red57\green192\blue38;\red0\green0\blue0;\red219\green39\blue218;
+\red56\green185\blue199;\red86\green32\blue244;\red170\green171\blue37;\red20\green153\blue2;}
+{\*\expandedcolortbl;;\cssrgb\c25704\c77963\c19556;\csgray\c0;\cssrgb\c89513\c29738\c88483;
+\cssrgb\c25544\c77008\c82022;\cssrgb\c41680\c25960\c96645;\cssrgb\c72330\c71683\c18597;\cssrgb\c0\c65000\c0;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f0\fs22 \cf2 \CocoaLigature0 const\cf3  express = require(
+\f1\b \cf4 "express"
+\f0\b0 \cf3 );\
+\cf2 const\cf3  helmet = require(
+\f1\b \cf4 "helmet"
+\f0\b0 \cf3 );\
+\cf2 const\cf3  app = express();\
+\cf2 var\cf3  mysql = require(
+\f1\b \cf4 'mysql'
+\f0\b0 \cf3 );\
+\cf2 var\cf3  bodyParser=require(
+\f1\b \cf4 "body-parser"
+\f0\b0 \cf3 );\
+\cf2 var\cf3  favicon = require(
+\f1\b \cf4 'serve-favicon'
+\f0\b0 \cf3 )\
+\cf2 var\cf3  path = require(
+\f1\b \cf4 'path'
+\f0\b0 \cf3 )\
+app.use(helmet());\
+app.use(express.static(
+\f1\b \cf4 "./frontendWM"
+\f0\b0 \cf3 ));\
+app.use(bodyParser.urlencoded(\{extended:false\}))\
+app.use(bodyParser.json())\
+\
+app.use(favicon(path.join(__dirname, 
+\f1\b \cf4 'frontendWM'
+\f0\b0 \cf3 , 
+\f1\b \cf4 'icon.ico'
+\f0\b0 \cf3 )))\
+\
+app.listen(\cf5 3000\cf3 , () => \{console.log(
+\f1\b \cf4 "Server Connected"
+\f0\b0 \cf3 )\});\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\b \cf6 //create db connection
+\f0\b0 \cf3 \
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf2 var\cf3  con = mysql.createConnection(\{\
+  host: 
+\f1\b \cf4 "localhost"
+\f0\b0 \cf3 ,\
+  user: 
+\f1\b \cf4 "demouser"
+\f0\b0 \cf3 ,\
+  password: 
+\f1\b \cf4 "demopassword"
+\f0\b0 \cf3 ,\
+  database: 
+\f1\b \cf4 "wm"
+\f0\b0 \cf3 \
+\});\
+\
+app.use((req, res, next) => \{\
+  res.header(
+\f1\b \cf4 'Access-Control-Allow-Origin'
+\f0\b0 \cf3 , 
+\f1\b \cf4 '*'
+\f0\b0 \cf3 );\
+  next();\
+\});\
+\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\b \cf6 //check if admin is correct
+\f0\b0 \cf3 \
+app.get(
+\f1\b \cf4 '/admindata'
+\f0\b0 \cf3 , \cf2 function\cf3  (req, res) \{\
+  con.query(
+\f1\b \cf4 "SELECT username, password FROM admin"
+\f0\b0 \cf3 , \cf2 function\cf3  (err,result, fields) \{\
+    
+\f1\b \cf7 if
+\f0\b0 \cf3  (err) 
+\f1\b \cf7 throw
+\f0\b0 \cf3  err;\
+        console.log(req.query.username);\
+console.log(req.query.password);\
+        
+\f1\b \cf7 if
+\f0\b0 \cf3 (result[\cf5 0\cf3 ].username==req.query.username && result[\cf5 0\cf3 ].password==req.query.password)\{\
+    res.json(\{
+\f1\b \cf4 "answer"
+\f0\b0 \cf3 :
+\f1\b \cf4 "correct"
+\f0\b0 \cf3 \});\
+  \}
+\f1\b \cf7 else
+\f0\b0 \cf3 \{\
+        res.json(\{
+\f1\b \cf4 "answer"
+\f0\b0 \cf3 :
+\f1\b \cf4 "incorrect"
+\f0\b0 \cf3 \});\
+\}\
+\
+\});\
+\});\
+\
+
+\f1\b \cf6 //get orders
+\f0\b0 \cf3 \
+app.get(
+\f1\b \cf4 '/orders'
+\f0\b0 \cf3 , \cf2 function\cf3  (req, res) \{\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\b \cf7 if
+\f0\b0 \cf3 (req.query.key==
+\f1\b \cf4 "secret"
+\f0\b0 \cf3 )\{\
+con.query(
+\f1\b \cf4 "SELECT * FROM orders"
+\f0\b0 \cf3 , \cf2 function\cf3  (err,result, fields) \{\
+    
+\f1\b \cf7 if
+\f0\b0 \cf3  (err) 
+\f1\b \cf7 throw
+\f0\b0 \cf3  err;\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+
+\f1\b \cf6         //var ord=JSON.stringify(result);
+\f0\b0 \cf3 \
+    res.json(\{
+\f1\b \cf4 "orders"
+\f0\b0 \cf3 :result\});\
+\});\
+\}
+\f1\b \cf7 else
+\f0\b0 \cf3 \{res.send(
+\f1\b \cf4 '*unauthorized*'
+\f0\b0 \cf3 )\}\
+\});\
+\
+
+\f1\b \cf6 //create orders
+\f0\b0 \cf3 \
+app.post(
+\f1\b \cf4 '/Cord'
+\f0\b0 \cf3 ,\cf2 function\cf3 (req,res)\{\
+  \cf2 var\cf3  oid=req.body.oid;\
+  \cf2 var\cf3  cdet=req.body.cdet;\
+  \cf2 var\cf3  otype=req.body.otype;\
+  \cf2 var\cf3  oprog=req.body.oprog;\
+  \cf2 var\cf3  empid=req.body.empid;\
+  res.send(
+\f1\b \cf4 "oid = "
+\f0\b0 \cf3 +oid+
+\f1\b \cf4 ",cdet = "
+\f0\b0 \cf3 +cdet+
+\f1\b \cf4 ",otype = "
+\f0\b0 \cf3 +otype+
+\f1\b \cf4 ",oprog = "
+\f0\b0 \cf3 +oprog+
+\f1\b \cf4 ",empid = "
+\f0\b0 \cf3 +empid);\
+ 
+\f1\b \cf6  //var userN="'"+user_name;
+\f0\b0 \cf3 \
+ 
+\f1\b \cf6  //res.send("User name = "+user_name+", password is "+password);
+\f0\b0 \cf3 \
+ 
+\f1\b \cf6  //res.end("yes");
+\f0\b0 \cf3 \
+
+\f1\b \cf6  // var sql = "INSERT INTO orders (orderid,clientdetails,ordertype,orderprogress,employeeID) VALUES ("+oid+','+cdet+','+otype+','+oprog+','+empid+')';
+\f0\b0 \cf3 \
+   console.log( 
+\f1\b \cf4 "INSERT INTO orders (orderid, clientdetails, ordertype, orderprogress, employeeID) VALUES ("
+\f0\b0 \cf3 +oid+
+\f1\b \cf4 ",'"+cdet+"','"+otype+"','"+oprog+"',"
+\f0\b0 \cf3 +empid+
+\f1\b \cf4 ")"
+\f0\b0 \cf3 );\cb8  \cb1 \
+    \cf2 var\cf3  sql = 
+\f1\b \cf4 "INSERT INTO orders (orderid, clientdetails, ordertype, orderprogress, employeeID) VALUES ("
+\f0\b0 \cf3 +oid+
+\f1\b \cf4 ",'"+cdet+"','"+otype+"','"+oprog+"',"
+\f0\b0 \cf3 +empid+
+\f1\b \cf4 ")"
+\f0\b0 \cf3 ;\cb8  \cb1 \
+ con.query(sql, \cf2 function\cf3  (err, result) \{\
+    
+\f1\b \cf7 if
+\f0\b0 \cf3  (err) 
+\f1\b \cf7 throw
+\f0\b0 \cf3  err;\
+    console.log(
+\f1\b \cf4 "1 record inserted"
+\f0\b0 \cf3 );\
+  \});\
+\
+\});\
+\
+\
+app.post(
+\f1\b \cf4 '/delo'
+\f0\b0 \cf3 ,\cf2 function\cf3 (req,res)\{\
+  \cf2 var\cf3  oid=req.body.questionID;\
+  \cf2 var\cf3  sql = 
+\f1\b \cf4 "DELETE FROM orders WHERE orderid ="
+\f0\b0 \cf3 +oid;\
+  con.query(sql, \cf2 function\cf3  (err, result) \{\
+    
+\f1\b \cf7 if
+\f0\b0 \cf3  (err) 
+\f1\b \cf7 throw
+\f0\b0 \cf3  err;\
+    console.log(
+\f1\b \cf4 "1 record deleted"
+\f0\b0 \cf3 );\
+  \});\
+\
+\});\
+\
+\
+}

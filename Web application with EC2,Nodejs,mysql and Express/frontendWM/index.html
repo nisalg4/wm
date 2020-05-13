@@ -1,0 +1,54 @@
+<html>
+<head>
+<title>Login Form Design</title>
+    <meta charset="utf-8"/>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="shortcut icon" href="icon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="loginbox">
+    <img src="avatar.png" class="avatar">
+        <h1>Login Here</h1>
+        <form name="login">
+            <p>Username</p>
+            <input type="text" name="usern" placeholder="Enter Username">
+            <p>Password</p>
+            <input type="text" name="pass" placeholder="Enter Password">
+            <input type="button" value="Login" onclick="check(this.form)">
+            <a href="#">Lost your password?</a><br>
+            <a href="#">Don't have an account?</a>
+        </form>
+
+    </div>
+<script language="javascript">
+
+function check(form) {
+                var url = "https://www.workmode.us/admindata";
+                console.log(url);
+                var params = "username=" + form.usern.value + "&" + "password=" + form.pass.value;
+                var http = new XMLHttpRequest();
+
+                console.log("GET", url + "?" + params);
+                http.open("GET", url + "?" + params, true);
+                http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                http.onreadystatechange = function ()
+                {
+                    if (http.readyState === 4) {
+                        console.log(http.responseText);
+
+                        var data = http.responseText;
+                        var jsonResponse = JSON.parse(data);
+                        if (jsonResponse["answer"] === "correct") {
+                            window.location.href = "./admin/admin.html";
+                        } else {
+                            window.alert("Wrong username or password");
+                        }
+                    }
+                }
+                http.send();
+            }</script>
+</body>
+</head>
+
+
+</html>

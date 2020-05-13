@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>WM</title>
+        <script type="text/javascript" src="manageorders.js"></script>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body onload="load()">
+        <div id="myform">
+            <b>Add a new Order</b>
+            <table>
+                <tr>
+                    <td>Order ID:</td>
+                    <td><input type="text" id="orderid"></td>
+                </tr>
+                <tr>
+                    <td>Client Details:</td>
+                    <td><input type="text" id="clientdetails"></td>
+                </tr>
+                <tr>
+                    <td>Order type:</td>
+                    <td><input type="text" id="ordertype"></td>
+                </tr>
+                <tr>
+                    <td>Order Progress:</td>
+                    <td><input type="text" id="orderprogress"></td>
+                </tr>
+                <tr>
+                    <td>Employee ID:</td>
+                    <td><input type="text" id="employeeid">
+                        <input type="button" id="createorder" value="Create Order" onclick="Javascript:addRow()">
+                    </td>
+                </tr>
+                
+                <tr>
+                    <td>&nbsp;</td>
+                    
+                </tr>
+            </table>
+        </div>
+        <div id="delete">
+            <b>Delete an order</b>
+            <table>
+                <tr>
+                    <td>Order ID:</td>
+                    <td><input type="text" id="deletes">
+                    <input type="button" id="deleteorder" value="Delete Order" onclick="Javascript:deleteRow()">
+                    </td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    
+                </tr>
+            </table>
+        </div>
+        <div id="mydata">
+            <b>All the Orders</b>
+            <table id="myTableData"  border="3" cellpadding="5">
+                <tr>
+                    <td><b>Order ID</b></td>
+                    <td><b>Client Details</b></td>
+                    <td><b>Order type</b></td>
+                    <td><b>Order Progress</b></td>
+                    <td><b>Employee ID</b></td>
+                </tr>
+            </table>
+            
+
+        </div>
+    </body>
+</html>
